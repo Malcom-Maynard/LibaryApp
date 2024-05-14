@@ -17,6 +17,14 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+
+.signUp-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 label {
   display: block;
   margin-bottom: 8px;
@@ -77,4 +85,20 @@ body {
 
 .multiline-tooltip:hover .tooltip-content {
   display: block;
+}
+.checkboxes label {
+  display: inline-block;
+  white-space: nowrap;
+}
+.checkboxes input {
+  vertical-align: baseline;
+}
+.checkboxes label span {
+  vertical-align: baseline;
+}
+
+
+.navbar-fixed-top {
+  top: 0;
+  border-width: 0 0 50px;
 }

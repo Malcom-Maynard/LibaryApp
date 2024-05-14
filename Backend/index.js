@@ -1,11 +1,11 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose');
-const { BookSchema,   } = require('./models/BookModel');
+const { BookSchema} = require('./models/BookModel');
 const {UserInfomationSchema  } = require('./models/UserInfomationModel');
+const { ImageSchema } =  require('../Backend/models/ImageModel'); 
 
 
-// Replace the uri string with your connection string.
 const uri = 'mongodb://127.0.0.1:27017/Amari_Libary_Database';
 const port = 3001; // Choose a port for your app
 
@@ -39,7 +39,7 @@ app.listen(port, () => {
 const connection = mongoose.createConnection(uri);
 const Book = connection.model('BookData', BookSchema);
 const UserInfo = connection.model('User information',UserInfomationSchema)
-
+const BookCover = connection.model('BookImages', ImageSchema);
 
 /*
 METHOD: GET
@@ -47,7 +47,7 @@ Description: Getting books based on ISBN passed by the user
 */
 app.get('/BookInfo/:ISBN',async (req, res) => {
     const {ISBN} = req.params
-
+    console.log("Route: "+'/BookInfo/:ISBN')
     console.log("USER SUMBITED ISBN: "+ISBN)
     const query = {ISBN : ISBN}
 
@@ -60,6 +60,127 @@ app.get('/BookInfo/:ISBN',async (req, res) => {
     
   })
 
+
+/*
+METHOD: GET
+Description: Getting books ISBN number
+*/
+app.get('/BookInfo/ISBN/:NameOfBook',async (req, res) => {
+  const {NameOfBook} = req.params
+
+  console.log("USER SUMBITED Book Name: "+NameOfBook)
+  const query = {Title : NameOfBook}
+
+ 
+  //Call Query
+  const bookData = await Book.findOne(query)
+  console.log("Data from the query "+bookData)
+  return res.status(200).send(bookData)
+  
+  
+})
+
+
+
+/*
+METHOD: GET
+Description: get the image realted data from the BookImages Database
+*/
+app.get('/BookCover/Images',async (req, res) => {
+  
+  
+ 
+  bookCoverData = await BookCover.find().limit(4)
+
+  const formattedData = bookCoverData.map(({ ISBN, EncodedString, Title }) => ({
+    isbn: ISBN,
+    image: EncodedString,
+    name: Title
+  }));
+  
+  console.log(formattedData)
+ 
+  return res.status(200).send(formattedData)
+  
+  
+})
+
+
+/*
+METHOD: GET
+Description: Most popular Books
+*/
+app.get('/BookInfo/',async (req, res) => {
+  
+  
+  collection.dr
+  //Call Query
+  const bookData = await Book.find().limit(4).sort({TimesTakenOut: -1})
+  console.log("Data from the query "+bookData)
+  return res.status(200).send(bookData)
+  
+  
+})
+
+
+/*
+METHOD: GET
+Description: Getting User Role from the DB
+*/
+app.get('/UserInfo/Role/:email',async (req, res) => {
+  
+  
+  var {email}  = req.params
+
+  console.log("USER SUMBITED Email: "+email)
+  const query = {Email : email}
+
+ 
+  //Call Query
+  const UserRole = await UserInfo.find(query)
+
+  console.log(UserRole)
+  var role = UserRole[0].Role
+  console.log("Data from the query "+role)
+  return res.status(200).send(role)
+  
+  
+})
+
+
+/*
+METHOD: GET
+Description: Getting User First and Last Name from the DB
+*/
+app.get('/UserInfo/Name/:email',async (req, res) => {
+  
+  
+  var {email}  = req.params
+
+  console.log("USER SUMBITED Name: "+email)
+  const query = {Email : email}
+
+ 
+  //Call Query
+  const UserName = await UserInfo.find(query)
+
+  console.log(UserName)
+
+  if(UserName!= undefined){
+    var firstName = UserName[0].FirstName
+    var LastName = UserName[0].LastName
+
+    var returnData = firstName+" , "+LastName
+    console.log("Data from the query "+returnData)
+    return res.status(200).send(returnData)
+
+  }
+
+  return res.status(200).send("User")
+  
+  
+  
+})
 
 /*
 METHOD: POST
@@ -83,8 +204,6 @@ app.post('/AddBook',async (req, res) => {
     //Call Query 
     
   })
-
-
 
 /*
 METHOD: post
@@ -129,7 +248,70 @@ app.post('/Login',async (req, res) => {
 METHOD: POST
 Description: Adding in userInfo to the collection "userInfomation"
 */
+app.post('/SignUp',async (req, res) => {
+  console.log("Getting in log in data")
+  var RequestBody = req.body
+  console.log(RequestBody)
+  var username =  req.body.username
+  var password =  req.body.password
+  var firstName =  req.body.firstname
+  var lastName =   req.body.lastname
 
+  var Userid = generateUserId(firstName,lastName)
+  
+
+  const query = {
+    Email : username,
+    Password: password,
+    FirstName: firstName,
+    LastName: lastName,
+    UserID: Userid,
+    role: "User"
+  }
+
+  const UsernameCheckquery = {
+    Email : username,
+  }
+
+
+  console.log(query)
+   
+  //Call Query
+  const UserData = await UserInfo.find(UsernameCheckquery)
+  console.log("No Duplicate Username"+UserData)
+  console.log(UserData.length)
+
+  if(UserData.length!=0){
+    console.log("Duplciate Username/Email")
+    return res.status(200).send("Duplciate Username/Email")
+
+  }
+
+  const NewUserData = await UserInfo.insertMany(query)
+
+  return res.status(200).send("New User inserted successfully")
+
+  
+  
+  
+})
+
+function generateUserId(FirstName, LastName){
+  
+  console.log(FirstName)
+  console.log(LastName)
+  var val = Math.floor(1000 + Math.random() * 9000);
+  console.log(val)
+  UserID = FirstName.substr(0,3)+LastName.substr(0,3)+val
+
+  console.log(UserID)
+
+  return UserID
+
+
+
+  
+}
 
 
 

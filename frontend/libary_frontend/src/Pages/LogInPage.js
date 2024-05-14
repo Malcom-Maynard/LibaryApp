@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate  } from 'react-router-dom';
 import axios from 'axios'
+import { Link } from "react-router-dom"
+import { CreateCookie } from '../utlis/Authorization';
 
 
 
@@ -17,7 +19,7 @@ export const LoginPage = () => {
     var form = document.getElementById("LogInForm");
     var Username = form.elements["username"].value
     var Password = form.elements["password"].value
-
+    
     console.log("Username: "+Username)
     console.log("Password: "+Password)
 
@@ -25,8 +27,8 @@ export const LoginPage = () => {
     console.log("Vailtaded: "+Vaildated)
     if(Vaildated){
       
-   
-      return navigate("/home");
+      CreateCookie(Username)
+      return navigate("/Home");
     }
 
     else{
@@ -47,7 +49,7 @@ export const LoginPage = () => {
     */
 
     
-    var vaild= false
+    var vaild= true
     var RequestURL ="http://localhost:3001/Login"
     axios.post(RequestURL, {
       username: Username,
@@ -97,7 +99,10 @@ export const LoginPage = () => {
           and least 10 characters in length&#13;" />
 
           <button type="submit">Enter</button>
+          <br></br>
+          <Link to="/SignUp">Dont have and account? Click here to sign up</Link>
         </form>
+        
       </div>
     </div>
   );

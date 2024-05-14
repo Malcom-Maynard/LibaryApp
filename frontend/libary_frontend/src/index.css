@@ -39,3 +39,35 @@ button {
 button:hover {
   background-color: #45a049;
 }
+
+.bookCover{
+
+  width: auto; /* Desired width */
+  height: 400px; /* Desired height */
+}
+.element1{
+
+  text-align: center;
+  
+}
+
+.BookDisplay-container{
+  justify-content: space-between;
+  display: flex;
+  max-width: 1200px;
+  margin: 3 auto;
+  gap: 45px;
+  text-align: center;
+  padding-top: 20px
+  
+ 
+  
+  
+
+}
+
+
+
+.HomePageInfo{
+    padding: 20px;
+}
