@@ -47,12 +47,16 @@ const BookCover = connection.model('BookImages', ImageSchema);
 async function UploadData(files) {
 
     for (const cover of files){
+      
         formatedCover = cover.split(".")[0]
+        //console.log(cover)
+        
         //Convert the image into Byte string
         var imageBuffer = fs.readFileSync('Book covers/Covers/'+cover);
         const base64Image = imageBuffer.toString('base64');
-        console.log(base64Image)
-    
+        //console.log(base64Image)
+        ISBN=''
+        Author=""
         var RequestURL ="http://localhost:3001/BookInfo/ISBN/"+formatedCover
         
     
@@ -60,6 +64,7 @@ async function UploadData(files) {
         .then(response => {
         
           ISBN= response.data.ISBN
+          Author=response.data.Author
       
           
         })
@@ -72,7 +77,8 @@ async function UploadData(files) {
     
             ISBN:ISBN,
             Title:formatedCover,
-            EncodedString: base64Image
+            EncodedString: base64Image,
+            Author: Author
     
         }
         console.log(query)

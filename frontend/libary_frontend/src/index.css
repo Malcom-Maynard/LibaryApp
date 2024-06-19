@@ -1,11 +1,13 @@
-body {
+body.custom-background {
+  color: #FF0000;
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  
   margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  
 }
 
 .login-container {
@@ -44,6 +46,7 @@ button:hover {
 
   width: auto; /* Desired width */
   height: 400px; /* Desired height */
+  object-fit: cover;
 }
 .element1{
 
@@ -60,6 +63,7 @@ button:hover {
   text-align: center;
   padding-top: 20px
   
+  
  
   
   
@@ -71,3 +75,62 @@ button:hover {
 .HomePageInfo{
     padding: 20px;
 }
+
+.Nofti{
+  text-align: center;
+  font-size: 15px;
+
+}
+
+
+
+.custom-dropdown-Notifcation {
+  width: 300px; /* Adjust the width as needed */
+  max-height: 400px; /* Adjust the height as needed */
+  overflow-y: auto; /* Add scroll if the content exceeds the max height */
+  border-style: solid;
+  border-width: 2px;
+  border-color: black;
+  text-align: center;
+}
+
+
+.grid-container-BookDisplay{
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  gap: 30px;
+  font-family: "Times New Roman", Times, serif;
+ 
+  
+  
+}
+
+.Book-Page-container{
+  justify-content: space-between;
+  display: flex;
+  max-width: 1200px;
+  margin: 3 auto;
+  gap: 45px;
+  text-align: center;
+  padding-top: 1350px;
+ 
+}
+
+.glow-text {
+  font-size: 2rem;
+  
+  transition: text-shadow 0.3s ease-in-out;
+}
+
+.glow-text:hover {
+
+  color: #b8b4b4;
+}
+
+.BookDetialsLink{
+  font-family: "Times New Roman", Times, serif;
+  color: black;
+
+}
+
+

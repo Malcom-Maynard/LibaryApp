@@ -41,6 +41,121 @@ const Book = connection.model('BookData', BookSchema);
 const UserInfo = connection.model('User information',UserInfomationSchema)
 const BookCover = connection.model('BookImages', ImageSchema);
 
+
+
+/*
+METHOD: GET
+Description: get the image realted data from the BookImages Database, 
+*/
+app.get('/BookCover/Images',async (req, res) => {
+  
+  const bookData = await Book.find({}, {_id:0}).sort({TimesTakenOut: -1})
+  console.log("/BookCover/Image-Data from the query "+bookData)
+
+  //Geting ISBN of all the bookshow
+  var Top4ISBN = bookData.map(({ ISBN }) => ISBN); 
+  
+  
+  bookCoverData=[]
+  console.log("Top4ISBN: "+Top4ISBN)
+  for (const data of Top4ISBN){
+    
+    const bookData = await BookCover.find({ISBN : data})
+     bookCoverData.push(bookData)
+
+  }
+  console.log("bookCoverData Length: "+ bookCoverData.length)
+  bookCoverData = await BookCover.find()
+  
+  formattedData= mapAndRemoveDuplicates_1(bookCoverData,"ISBN")
+console.log("formatted data length : ", formattedData.length);
+
+return await res.status(200).send(formattedData); 
+  
+})
+
+/* 
+METHOD: GET
+Description: Getting books All books covers that are stored in DB
+*/
+
+app.get('/BookInfo/',async (req, res) => {
+ 
+
+ 
+  //Call Query
+  const bookData = await Book.find({})
+  console.log("/BookInfo/-Data from the query "+bookData)
+  return res.status(200).send(bookData)
+  
+  
+})
+
+
+/*
+METHOD: GET
+Description: get the image realted data from the BookImages Database, for home page top 4
+*/
+app.get('/BookCover/Images/Popular',async (req, res) => {
+  
+  const bookData = await Book.find({}, {_id:0}).limit(4).sort({TimesTakenOut: -1})
+  console.log("/BookCover/Images/Popular-Data from the query "+bookData)
+
+  //Geting ISBN of all the bookshow
+  var Top4ISBN = bookData.slice(0, 4).map(({ ISBN }) => ISBN);
+
+  //console.log("/BookCover/Image; Top4ISBN "+Top4ISBN +" "+(Top4ISBN[0]))
+ 
+  bookCoverData=[]
+
+  for (const data of Top4ISBN){
+    
+    const bookData = await BookCover.find({ISBN : data})
+    //console.log("/BookCover/Image; bookData: "+ bookData)
+     bookCoverData.push(bookData)
+
+  }
+  console.log("bookCoverData Length: "+ bookCoverData.length)
+  //bookCoverData = await BookCover.find().limit(4)
+  
+  formattedData= mapAndRemoveDuplicates(bookCoverData,"ISBN")
+console.log("formatted data length : ", formattedData.length);
+
+return await res.status(200).send(formattedData); 
+  
+})
+
+
+/*
+METHOD: GET
+Description: Most popular Books
+*/
+app.get('/BookInfo/Popular',async (req, res) => {
+  
+  
+  
+  //Call Query
+  const bookData = await Book.find().limit(4).sort({TimesTakenOut: -1})
+  console.log("Data from the query "+bookData)
+  return res.status(200).send(bookData)
+  
+  
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 METHOD: GET
 Description: Getting books based on ISBN passed by the user
@@ -80,47 +195,6 @@ app.get('/BookInfo/ISBN/:NameOfBook',async (req, res) => {
   
 })
 
-
-
-/*
-METHOD: GET
-Description: get the image realted data from the BookImages Database
-*/
-app.get('/BookCover/Images',async (req, res) => {
-  
-  
- 
-  bookCoverData = await BookCover.find().limit(4)
-
-  const formattedData = bookCoverData.map(({ ISBN, EncodedString, Title }) => ({
-    isbn: ISBN,
-    image: EncodedString,
-    name: Title
-  }));
-  
-  console.log(formattedData)
- 
-  return res.status(200).send(formattedData)
-  
-  
-})
-
-
-/*
-METHOD: GET
-Description: Most popular Books
-*/
-app.get('/BookInfo/',async (req, res) => {
-  
-  
-  collection.dr
-  //Call Query
-  const bookData = await Book.find().limit(4).sort({TimesTakenOut: -1})
-  console.log("Data from the query "+bookData)
-  return res.status(200).send(bookData)
-  
-  
-})
 
 
 /*
@@ -313,6 +387,42 @@ function generateUserId(FirstName, LastName){
   
 }
 
+const mapAndRemoveDuplicates = (array, key) => {
+  const seen = new Set();
+  return array
+    .map(item => {
+      const newItem = {
+        ISBN: item[0].ISBN,
+        Title: item[0].Title,
+        Image: item[0].EncodedString,
+      };
+      if (seen.has(newItem[key])) {
+        return null; // Exclude duplicates
+      }
+      seen.add(newItem[key]);
+      return newItem;
+    })
+    .filter(item => item !== null); // Remove null values
+};
 
 
- 
+const mapAndRemoveDuplicates_1 = (array, key) => {
+  const seen = new Set();
+  return array
+    .map(item => {
+      const newItem = {
+        ISBN: item.ISBN,
+        Title: item.Title,
+        Author: item.Author,
+        Image: item.EncodedString,
+      };
+      if (seen.has(newItem[key])) {
+        return null; // Exclude duplicates
+      }
+      seen.add(newItem[key]);
+      return newItem;
+    })
+    .filter(item => item !== null); // Remove null values
+};
+
+

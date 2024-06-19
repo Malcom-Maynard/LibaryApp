@@ -18,6 +18,13 @@ const ImageSchema = new mongoose.Schema({
     type: String,
   }
 
+  ,
+
+  Author :{
+
+    type: String,
+  }
+
   
 
   
