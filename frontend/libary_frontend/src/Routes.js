@@ -1,9 +1,9 @@
 //Import Statments
-import { HomePage } from "./Pages/HomePage"
 import { LoginPage } from "./Pages/LogInPage"
 import { SignUpPage } from "./Pages/SignInPage";
 import { BookPage } from "./Pages/BookPage";
-import { BrowserRouter as Router,  Routes,  Route,Navigate  } from "react-router-dom";
+import {SingleBookPage} from "./Pages/Books/SingleBookPage"
+import { BrowserRouter as Router,  Routes,  Route  } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -30,6 +30,10 @@ export const WebPageRoutes = () => {
 
                  {/* Route for the Home Page*/}
                  <Route exact  path="/Books" element={<BookPage/>}/>
+                
+                 
+                <Route exact  path="/Books/:pageId" element={<SingleBookPage/>}/>
+                 
 
             </Routes>  
         </Router>

@@ -1,0 +1,26 @@
+.rating-container {
+    display: inline-block;
+    position: relative;
+    font-size: 2em;
+    color: gold;
+    cursor: pointer;
+  }
+  
+  .rating-number {
+    display: inline-block;
+    background-color: #000;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-left: 10px;
+    font-size: 0.5em; /* Adjust this value to fit the stars */
+  }
+  
+  .stars {
+    display: inline-block;
+  }
+  
+  .star {
+    margin-right: 5px;
+  }
+  

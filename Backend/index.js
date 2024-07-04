@@ -74,6 +74,39 @@ return await res.status(200).send(formattedData);
   
 })
 
+
+/*
+METHOD: GET
+Description: get the image realted data from the BookImages Database based on ISBN, 
+*/
+app.get('/BookCover/Images/:ISBN',async (req, res) => {
+  
+  const {ISBN_Param} = req.params
+  const bookData = await Book.find({}, {_id:0})
+  console.log("/BookCover/Image-Data from the query "+bookData)
+
+  //Geting ISBN of all the bookshow
+  var ISBN = bookData.map(({ ISBN }) => ISBN); 
+  
+  
+  bookCoverData=[]
+  console.log("ISBN: "+ISBN)
+  for (const data of ISBN){
+    
+    const bookData = await BookCover.find({ISBN : data})
+     bookCoverData.push(bookData)
+
+  }
+  console.log("bookCoverData Length: "+ bookCoverData.length)
+  bookCoverData = await BookCover.find()
+  
+  formattedData= mapAndRemoveDuplicates_1(bookCoverData,"ISBN")
+console.log("formatted data length : ", formattedData.length);
+
+return await res.status(200).send(formattedData); 
+  
+})
+
 /* 
 METHOD: GET
 Description: Getting books All books covers that are stored in DB
@@ -144,18 +177,6 @@ app.get('/BookInfo/Popular',async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 METHOD: GET
 Description: Getting books based on ISBN passed by the user
@@ -205,7 +226,7 @@ app.get('/UserInfo/Role/:email',async (req, res) => {
   
   
   var {email}  = req.params
-
+  email = email.split(",")[0]
   console.log("USER SUMBITED Email: "+email)
   const query = {Email : email}
 
@@ -213,7 +234,7 @@ app.get('/UserInfo/Role/:email',async (req, res) => {
   //Call Query
   const UserRole = await UserInfo.find(query)
 
-  console.log(UserRole)
+  console.log(UserRole[0])
   var role = UserRole[0].Role
   console.log("Data from the query "+role)
   return res.status(200).send(role)
@@ -238,7 +259,7 @@ app.get('/UserInfo/Name/:email',async (req, res) => {
   //Call Query
   const UserName = await UserInfo.find(query)
 
-  console.log(UserName)
+  console.log("Username for query: "+UserName)
 
   if(UserName!= undefined){
     var firstName = UserName[0].FirstName

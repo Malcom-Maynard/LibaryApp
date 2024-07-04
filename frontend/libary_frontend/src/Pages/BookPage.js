@@ -28,7 +28,7 @@ const Book = ({ ISBN, Image, Title, Author }) => {
     <div className="book">
       <img src={`data:image/jpeg;base64,${Image}`} alt={Title} className="bookCover" />
       <div>
-        <h3 class="glow-text"> <b>{Title}</b> </h3>
+        <a href={`/Books/${Title}`} className='my-link'> <h3 class="glow-text"> <b>{Title}</b> </h3></a>
         <p>By: {Author}</p>
       </div>
     </div>
