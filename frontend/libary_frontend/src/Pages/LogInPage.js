@@ -12,7 +12,7 @@ export const LoginPage = () => {
   //Creating var to navigate to the next page 
   const navigate = useNavigate();
 
-
+  localStorage.clear()
   //On the button press go to the "/Home Page"
   const  handleSubmit = async (event) => {
 

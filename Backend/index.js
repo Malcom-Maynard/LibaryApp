@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const { BookSchema} = require('./models/BookModel');
 const {UserInfomationSchema  } = require('./models/UserInfomationModel');
 const { ImageSchema } =  require('../Backend/models/ImageModel'); 
+//const { default: Ratings } = require('../frontend/libary_frontend/src/Pages/Ratings');
 
 
 const uri = 'mongodb://127.0.0.1:27017/Amari_Libary_Database';
@@ -49,26 +50,50 @@ Description: get the image realted data from the BookImages Database,
 */
 app.get('/BookCover/Images',async (req, res) => {
   
-  const bookData = await Book.find({}, {_id:0}).sort({TimesTakenOut: -1})
-  console.log("/BookCover/Image-Data from the query "+bookData)
+  console.log("/BookCover/Images: req.query.title",req.query)
+
+  query = {
+   
+  }
+
+  if (req.query["title"]!='' && req.query["title"]!=undefined){
+    query["Title"] = req.query["title"]
+
+  }
+
+  if (req.query["author"]!='' && req.query["author"]!=undefined){
+    query["Author"] = req.query["author"]
+
+  }
+  if (req.query["genre"]!=''&& req.query["genre"]!=undefined){
+    query["Genre"] = req.query["genre"]
+
+  }
+  if (req.query["rating"]!=''&& req.query["rating"]!=undefined){
+    query["Rating"] = {"$gt":req.query["rating"]}
+
+  }
+  //console.log("/BookCover/Images: Query",query)
+  const bookData = await Book.find(query).sort({ TimesTakenOut: -1 });
+  //console.log("/BookCover/Image-Data from the query "+bookData)
 
   //Geting ISBN of all the bookshow
-  var Top4ISBN = bookData.map(({ ISBN }) => ISBN); 
+  var BookISBNs = bookData.map(({ ISBN }) => ISBN); 
   
   
   bookCoverData=[]
-  console.log("Top4ISBN: "+Top4ISBN)
-  for (const data of Top4ISBN){
+  console.log("ISBNs: "+BookISBNs)
+  for (const data of BookISBNs){
     
     const bookData = await BookCover.find({ISBN : data})
      bookCoverData.push(bookData)
 
   }
   console.log("bookCoverData Length: "+ bookCoverData.length)
-  bookCoverData = await BookCover.find()
+  //bookCoverData = await BookCover.find()
   
-  formattedData= mapAndRemoveDuplicates_1(bookCoverData,"ISBN")
-console.log("formatted data length : ", formattedData.length);
+formattedData= mapAndRemoveDuplicates(bookCoverData,"ISBN")
+//console.log("formatted data length : ", formattedData.length);
 
 return await res.status(200).send(formattedData); 
   
@@ -79,31 +104,20 @@ return await res.status(200).send(formattedData);
 METHOD: GET
 Description: get the image realted data from the BookImages Database based on ISBN, 
 */
-app.get('/BookCover/Images/:ISBN',async (req, res) => {
+app.get('/BookCover/Images/Single/:ISBN',async (req, res) => {
   
-  const {ISBN_Param} = req.params
-  const bookData = await Book.find({}, {_id:0})
-  console.log("/BookCover/Image-Data from the query "+bookData)
+  console.log("Calling route: Data from image getting in SampleBookPage")
+  const {ISBN} = req.params
+  console.log("ISBN form page: "+ISBN)
 
-  //Geting ISBN of all the bookshow
-  var ISBN = bookData.map(({ ISBN }) => ISBN); 
+  const bookData = await BookCover.find({ISBN : ISBN})
   
-  
-  bookCoverData=[]
-  console.log("ISBN: "+ISBN)
-  for (const data of ISBN){
-    
-    const bookData = await BookCover.find({ISBN : data})
-     bookCoverData.push(bookData)
 
-  }
-  console.log("bookCoverData Length: "+ bookCoverData.length)
-  bookCoverData = await BookCover.find()
-  
-  formattedData= mapAndRemoveDuplicates_1(bookCoverData,"ISBN")
-console.log("formatted data length : ", formattedData.length);
 
-return await res.status(200).send(formattedData); 
+
+  
+
+return await res.status(200).send(bookData); 
   
 })
 
@@ -155,6 +169,21 @@ app.get('/BookCover/Images/Popular',async (req, res) => {
 console.log("formatted data length : ", formattedData.length);
 
 return await res.status(200).send(formattedData); 
+  
+})
+
+
+/*
+METHOD: GET
+Description: gets the image of a book based off the name that is given
+*/
+app.get('/BookCover/Images/:Title',async (req, res) => {
+
+  const {Title} = req.params
+  console.log("Title of book from Param: ",Title)
+  const BookCoverData = await BookCover.find({Title : Title})
+  //console.log(BookCoverData[0]["EncodedString"])
+  return await res.status(200).send(BookCoverData[0]["EncodedString"]); 
   
 })
 
@@ -416,6 +445,7 @@ const mapAndRemoveDuplicates = (array, key) => {
         ISBN: item[0].ISBN,
         Title: item[0].Title,
         Image: item[0].EncodedString,
+        Author: item[0].Author
       };
       if (seen.has(newItem[key])) {
         return null; // Exclude duplicates

@@ -53,29 +53,17 @@ const Notifications = ({ message, Time,Date }) => {
     </div>
   );
 };
-const NotificationList = ({ notification }) => {
-
-  console.log("Tesing: ", notification)
-  return (
-    <div>
-      {notification.map((notification, index) => (
-        <Notifications key={index} {...notification} />
-      ))}
-    </div>
-  );
-};
-
-
-
 
 export const BookPage = () => {
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [NotificationData, setNotificationData] = useState([ {message: "Testing",Time: "12:00 AM", Date:"5/23/2024"},{message: "Test nofi message",Time: "11:00 AM",Date:"5/19/2024"}]);
-  const [basket, setBasket] = useState([]); 
   const [bookData, setBookData] = useState([]);
+  const [SortBy, setSortBy] = useState([]);
+  
 
 
+  
 
   useEffect(() => {
     var username = getCookie("Email");
@@ -101,7 +89,7 @@ export const BookPage = () => {
     const fetchBookData = async () => {
       try {
         const response = await axios.get('http://localhost:3001/BookCover/Images',);
-        console.log("RESPONSE DATA: "+response.data[0])
+        console.log("RESPONSE DATA: "+response.data)
         setBookData(response.data);
       } catch (error) {
         console.error('Error fetching book data:', error);
@@ -110,11 +98,58 @@ export const BookPage = () => {
     fetchBookData();
   }, []);
 
+  const SearchForBook = async ( ) =>{
+
+    console.log("In the SearchForBook function")
+   
+
+    const fetchBookData = async () => {
+      try {
+        
+      
+        const response = await axios.get('http://localhost:3001/BookCover/Images',{
+          params: {
+            title:document.getElementById("TitleData").value,
+            author: document.getElementById("AuthorData").value,
+            genre: document.getElementById("GenreData").value,
+            rating: document.getElementById("RatingData").value
+
+          }
+        });
+        console.log("RESPONSE DATA: "+response.data[0])
+        setBookData(response.data);
+      } catch (error) {
+        console.error('Error fetching book data:', error);
+      }
+    };
+    fetchBookData();
+    
+
+
+  }
   return (
     <body className="p-3 m-0 border-0 bd-example m-0 border-0">
       {<DefaultPage></DefaultPage>}
+      
+     <div className='search_box'>
+     <label style={{ fontWeight: "bold" }}>Search Criteria</label>
+
+        <br></br>
+        <form>
+
+          <label>Title</label> <input type='text' id="TitleData"></input><br></br>
+          <label>Author</label> <input type='text' id="AuthorData"></input><br></br>
+          <label>Genre</label> <input type='text' id="GenreData"></input><br></br>
+          <label>Rating</label> <input type='number' min="1" max ="5" id="RatingData"></input><br></br><br></br>
+          <button  type="button" onClick={SearchForBook}> Search</button>
+        </form>
+      </div>
+
+      
       <div class="Book-Page-container">
-        <BookList books={bookData} />
+        <div className='grid-item'>
+          <BookList books={bookData} />
+        </div>
       </div> 
       
     </body>

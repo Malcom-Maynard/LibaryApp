@@ -10,7 +10,7 @@ export function CreateCookie(email){
     
 export function getCookie(name) {
     var nameEQ = name + "=";
-    var cookies = document.cookie.split(';');
+    var cookies = document.cookie.split(',');
     for(var i = 0; i < cookies.length; i++) {
         var cookie = cookies[i];
         while (cookie.charAt(0) === ' ') {

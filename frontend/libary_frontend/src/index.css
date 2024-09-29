@@ -45,8 +45,17 @@ button:hover {
 .bookCover{
 
   width: auto; /* Desired width */
+  height: 500px; /* Desired height */
+  object-fit: cover;
+}
+
+.bookCover-Single{
+
+  width: auto; /* Desired width */
   height: 400px; /* Desired height */
   object-fit: cover;
+  float: left;
+  margin-right: 5px;
 }
 .element1{
 
@@ -97,23 +106,22 @@ button:hover {
 
 .grid-container-BookDisplay{
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: repeat(4, 1fr);
   gap: 30px;
   font-family: "Times New Roman", Times, serif;
+  width: 1200px;
+  align-items: start;
+  position: absolute;
+  left: 390px; 
+  top: 100px;
  
   
   
 }
 
-.Book-Page-container{
-  justify-content: space-between;
-  display: flex;
-  max-width: 1200px;
-  margin: 3 auto;
-  gap: 45px;
-  text-align: center;
-  padding-top: 1350px;
- 
+.grid-item {
+  grid-column: 1 / 2; /* Ensures the item starts at the first column */
+  grid-row: 1 / 2; /* Ensures the item starts at the first row */
 }
 
 .glow-text {
@@ -164,3 +172,61 @@ button:hover {
   margin-right: 5px;
 }
 
+.search_box{
+  float: left;
+  width: 350px;
+  height: 344px;
+  margin-left: -1559px;
+  border-style:solid;
+  position: fixed;
+  
+
+}
+#input{
+  width: 50%;
+}
+.Book-Page-container{
+  justify-content: space-between;
+  display: flex;
+  max-width: 1200px;
+  text-align: center;
+  
+ 
+}
+
+
+.grid-container-BookDisplay_CheckOut{
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 30px;
+  font-family: "Times New Roman", Times, serif;
+  width: 1200px;
+  align-items: start;
+  position: absolute;
+  left: 90px; 
+  top: 100px;
+ 
+  
+  
+}
+
+
+.bookCover-Checkout{
+
+  width: 70%; /* Desired width */
+  height:  70%; /* Desired height */
+  object-fit: cover;
+}
+
+
+.Checkout-button{
+
+  width: 15%; /* Desired width */
+  height:  70%; /* Desired height */
+  background-color: #000;
+ 
+}
+
+.Checkout-button:hover {
+  background-color: #6b6e6e;
+}

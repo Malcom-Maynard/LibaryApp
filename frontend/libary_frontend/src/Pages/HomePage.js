@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import axios from 'axios';
+import DefaultPage from './DefaultPage';
 
 function getCookie(name) {
   var nameEQ = name + "=";
@@ -133,78 +134,8 @@ export const HomePage = () => {
 
   return (
     <body className="p-3 m-0 border-0 bd-example m-0 border-0">
-      <div>
-        <nav className="navbar navbar-expand-lg navbar-light bg-dark fixed-top" data-bs-theme="dark">
-          <a className="navbar-brand" href="#">Library Page</a>
-          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mr-auto">
-              <li className="nav-item active">
-                <a className="nav-link" href="#">Home <span className="sr-only"></span></a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/Books">Books</a>
-              </li>
-
-              <li className="nav-item">
-                <a className="nav-link" href="#">Calander</a>
-              </li>
-
-              <li className="nav-item">
-                <a className="nav-link" href="#">About Us</a>
-              </li>
-
-
-
-              {isAdmin && (
-                <li className="nav-item">
-                  <a className="nav-link" href="#admin">Admin Page</a>
-                </li>
-              )}
-            </ul>
-
-
-            {/* Basket Dropdown */}
-            <ul className="navbar-nav ms-auto">
-              <li className="nav-item dropdown">
-                <button className="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style={{ width: "400px", borderStyle: "solid" }}>
-                  Basket
-                </button>
-                <ul className="dropdown-menu dropdown-menu-dark dropdown-menu-end custom-dropdown-Notifcation">
-                  {/* Render basket items here */}
-                  {basket.length > 0 ? (
-                    basket.map((item, index) => (
-                      <li key={index}><a className="dropdown-item" href="#">{item.name}</a></li>
-                    ))
-                  ) : (
-                    <li><a className="dropdown-item" href="#">Your basket is empty</a></li>
-                  )}
-                </ul>
-              </li>
-            </ul>
-         
-
-            {/* Notification Dropdown */}
-
-            <ul className="navbar-nav ml-auto" >
-              <li className="nav-item dropdown" >
-                <button className="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style={{width: "400px", borderStyle:"soild"}}>
-                  Notifications
-                </button>
-                <ul className="dropdown-menu dropdown-menu-dark dropdown-menu-end" style={{width: "400 px"}}>
-                  
-                  <NotificationList notification={NotificationData} />
-
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </div>
-
+      
+      {<DefaultPage></DefaultPage>}
       <div className='HomePageInfo'>
         <div className='element1'><h1>Hello <b>{Name}</b> Welcome to the Library</h1></div>
         <div style={{ textAlign: 'center', padding: '30px'}}>
