@@ -213,8 +213,8 @@ button:hover {
 
 .bookCover-Checkout{
 
-  width: 70%; /* Desired width */
-  height:  70%; /* Desired height */
+  width: 100%; /* Desired width */
+  height:  400px; /* Desired height */
   object-fit: cover;
 }
 

@@ -59,7 +59,7 @@ export const DefaultPage = () => {
   ]);
   const [basket, setBasket] = useState([]);
   const [AddedToBasket, setAddedToBasket] = useState(false);
-
+  
   useEffect(() => {
     var username = getCookie("Email");
     var RequestURL = "http://localhost:3001/UserInfo/Role/" + username;
@@ -102,6 +102,8 @@ export const DefaultPage = () => {
       setAddedToBasket(false);
     }
   }, [AddedToBasket]);
+
+ 
 
   
   return (
